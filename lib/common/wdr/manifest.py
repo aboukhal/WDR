@@ -1,5 +1,6 @@
 from types import DictType
 from types import ListType
+import codecs
 import com.ibm.ws.scripting
 import logging
 import os
@@ -1452,14 +1453,14 @@ def processExtraAppOption(mo, name, value):
         )
 
 
-def loadApplicationManifest(filename, variables={}, manifestPath=None):
+def loadApplicationManifest(filename, variables={}, manifestPath=None, encoding='UTF-8'):
     manifestPath = manifestPath or _defaultManifestPath()
     filename = os.path.normpath(
         os.path.abspath(
             _locateManifestFile(filename, manifestPath)
         )
     )
-    fi = open(_locateManifestFile(filename, manifestPath), 'r')
+    fi = codecs.open(_locateManifestFile(filename, manifestPath), 'r', encoding=encoding)
     try:
         manifestObjects = []
         lines = fi.readlines()
@@ -1684,7 +1685,7 @@ def _locateManifestFile(filename, manifestPath):
     raise Exception('Manifest file %s not found in %s' % (filename, manifestPath))
 
 
-def loadConfigurationManifest(filename, variables={}, manifestPath=None):
+def loadConfigurationManifest(filename, variables={}, manifestPath=None, encoding='UTF-8'):
     manifestPath = manifestPath or _defaultManifestPath()
     filename = os.path.normpath(
         os.path.abspath(
@@ -1692,7 +1693,7 @@ def loadConfigurationManifest(filename, variables={}, manifestPath=None):
         )
     )
     logger.debug('loading file %s with variables %s', filename, variables)
-    fi = open(filename, 'r')
+    fi = codecs.open(filename, 'r', encoding=encoding)
     logger.debug('file %s successfully opened', filename)
     try:
         manifestObjects = []
